@@ -298,27 +298,60 @@ function BriefBuilder({ initialPrompt = "", linkedOpportunityId = null }: { init
   const [saveError, setSaveError] = useState<string | null>(null);
   const [copyMsg, setCopyMsg] = useState<string | null>(null);
   const [generating, setGenerating] = useState(false);
+  const [streamText, setStreamText] = useState<string | null>(null);
 
   useEffect(() => { if (initialPrompt) setPrompt(initialPrompt); }, [initialPrompt]);
 
   async function handleGenerate() {
     if (!prompt.trim()) { setError("Please enter a prompt or question."); return; }
     setError(null); setSavedAt(null); setSaveError(null); setGenerating(true);
+    setGenerated(null); setStreamText("");
+
     try {
-      const res = await fetch("/api/generate", {
+      const res = await fetch("/api/generate/stream", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt: prompt.trim(), sourceNotes, briefType, tone }),
       });
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({ error: "Unknown error" }));
-        setError((err as { error?: string }).error ?? "Generation failed. Please try again.");
+
+      if (!res.ok || !res.body) {
+        setGenerated(generateBrief(prompt.trim(), sourceNotes, briefType, tone));
+        setStreamText(null);
         return;
       }
-      const data = await res.json() as GeneratedBrief;
-      setGenerated(data);
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop() ?? "";
+
+        for (const line of lines) {
+          if (!line.startsWith("data: ")) continue;
+          const raw = line.slice(6).trim();
+          if (!raw) continue;
+          let evt: { chunk?: string; done?: boolean; result?: GeneratedBrief; error?: string };
+          try { evt = JSON.parse(raw); } catch { continue; }
+
+          if (evt.chunk) {
+            setStreamText((prev) => (prev ?? "") + evt.chunk);
+          } else if (evt.done && evt.result) {
+            setStreamText(null);
+            setGenerated(evt.result);
+          } else if (evt.error) {
+            setError(evt.error);
+            setStreamText(null);
+          }
+        }
+      }
     } catch {
       // Network error — fall back to the template generator
+      setStreamText(null);
       setGenerated(generateBrief(prompt.trim(), sourceNotes, briefType, tone));
     } finally {
       setGenerating(false);
@@ -378,7 +411,21 @@ function BriefBuilder({ initialPrompt = "", linkedOpportunityId = null }: { init
         </div>
         <div className="bg-white border border-border rounded-xl p-6 shadow-sm min-h-[300px] max-h-[80vh] overflow-y-auto">
           <h2 className="text-sm font-semibold text-foreground mb-5">Output</h2>
-          {generated ? (
+          {streamText !== null ? (
+            <div className="space-y-3">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <span className="inline-flex gap-0.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce [animation-delay:0ms]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce [animation-delay:150ms]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce [animation-delay:300ms]" />
+                </span>
+                Writing your brief…
+              </div>
+              <pre className="text-xs text-muted-foreground font-mono whitespace-pre-wrap leading-relaxed max-h-64 overflow-y-auto border border-border rounded-lg p-3 bg-slate-50">
+                {streamText}<span className="animate-pulse">▌</span>
+              </pre>
+            </div>
+          ) : generated ? (
             <div className="space-y-1">
               <BriefOutput brief={generated} />
               <div className="flex flex-wrap items-center gap-3 pt-5 border-t border-border mt-5">
