@@ -1,24 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <title>College Brief Lab</title>
-    <meta name="description" content="Turn prompts, readings, and opportunities into structured essay outlines, policy memos, and debate cases." />
-    <meta name="robots" content="index, follow" />
-    <meta property="og:title" content="College Brief Lab" />
-    <meta property="og:description" content="Turn prompts, readings, and opportunities into structured briefs and plans." />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="College Brief Lab" />
-    <meta name="twitter:description" content="Turn prompts, readings, and opportunities into structured briefs and plans." />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>College Brief Lab</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <nav id="top-nav">
+    <div class="nav-inner">
+      <span class="nav-title">College Brief Lab</span>
+      <div class="nav-auth" id="nav-auth">
+        <button id="btn-sign-in" class="btn-primary">Sign in with Google</button>
+        <span id="user-display" class="user-display hidden">
+          <img id="user-avatar" src="" alt="" style="width:28px;height:28px;border-radius:50%;object-fit:cover;display:none" />
+          <span id="user-name"></span>
+          <button id="btn-sign-out" class="btn-secondary">Log out</button>
+        </span>
+      </div>
+    </div>
+  </nav>
+
+  <div id="tab-bar">
+    <div class="tab-bar-inner">
+      <button class="tab-btn active" data-view="dashboard">Dashboard</button>
+      <button class="tab-btn" data-view="briefs">Brief Builder</button>
+      <button class="tab-btn" data-view="opportunities">Opportunities</button>
+    </div>
+  </div>
+
+  <main id="app"></main>
+
+  <!-- Firebase SDK (compat — no build step required) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics-compat.js"></script>
+
+  <script src="auth.js"></script>
+  <script src="app.js"></script>
+</body>
 </html>

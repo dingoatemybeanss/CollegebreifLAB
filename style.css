@@ -1,0 +1,477 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #f5f5f7;
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #1a1a1a;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ─── Top Nav ─────────────────────────────────────────── */
+
+#top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #fff;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.nav-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 20px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: #1f3b73;
+  letter-spacing: -0.01em;
+}
+
+.nav-auth {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-display {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #555;
+}
+
+/* ─── Tab Bar ─────────────────────────────────────────── */
+
+#tab-bar {
+  background: #fff;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.tab-bar-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  gap: 4px;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  margin-bottom: -1px;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.tab-btn:hover {
+  color: #1f3b73;
+}
+
+.tab-btn.active {
+  color: #1f3b73;
+  border-bottom-color: #1f3b73;
+}
+
+/* ─── Main Container ──────────────────────────────────── */
+
+#app {
+  max-width: 960px;
+  margin: 28px auto;
+  padding: 0 20px 60px;
+}
+
+/* ─── Cards ───────────────────────────────────────────── */
+
+.card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.card h2 {
+  margin: 0 0 4px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.card p {
+  margin: 0;
+  color: #555;
+  font-size: 14px;
+}
+
+/* ─── Stat Cards ──────────────────────────────────────── */
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04);
+  padding: 20px;
+  text-align: center;
+}
+
+.stat-card .stat-number {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1f3b73;
+  display: block;
+  line-height: 1.2;
+}
+
+.stat-card .stat-label {
+  font-size: 13px;
+  color: #777;
+  margin-top: 4px;
+}
+
+/* ─── Section Headings ────────────────────────────────── */
+
+.section-heading {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 14px;
+}
+
+/* ─── Activity List ───────────────────────────────────── */
+
+.activity-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.activity-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 14px;
+  gap: 12px;
+}
+
+.activity-list li:last-child {
+  border-bottom: none;
+}
+
+.activity-label {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: #eef1f8;
+  color: #1f3b73;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.activity-label.opp {
+  background: #edf7f0;
+  color: #1a6639;
+}
+
+.activity-title {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #333;
+}
+
+/* ─── Signed-out message ──────────────────────────────── */
+
+.signed-out-msg {
+  text-align: center;
+  padding: 60px 20px;
+  color: #777;
+  font-size: 15px;
+}
+
+.signed-out-msg strong {
+  display: block;
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+/* ─── Brief Builder Layout ────────────────────────────── */
+
+.brief-builder {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 767px) {
+  .brief-builder {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── Forms ───────────────────────────────────────────── */
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 5px;
+}
+
+.form-group textarea,
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 9px 11px;
+  border: 1px solid #d2d2d7;
+  border-radius: 7px;
+  font-family: inherit;
+  font-size: 14px;
+  color: #1a1a1a;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+.form-group textarea:focus,
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #1f3b73;
+  box-shadow: 0 0 0 3px rgba(31, 59, 115, 0.12);
+}
+
+/* ─── Buttons ─────────────────────────────────────────── */
+
+.btn-primary {
+  background: #1f3b73;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 9px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-primary:hover {
+  background: #162d5a;
+}
+
+.btn-secondary {
+  background: #fff;
+  color: #1f3b73;
+  border: 1px solid #c5cfe8;
+  border-radius: 7px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.btn-secondary:hover {
+  background: #f0f3fb;
+  border-color: #1f3b73;
+}
+
+.btn-small {
+  padding: 5px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 6px;
+}
+
+.btn-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+/* ─── Output panel ────────────────────────────────────── */
+
+.brief-output {
+  background: #fafafa;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  min-height: 200px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #222;
+}
+
+.brief-output h3 {
+  margin: 18px 0 6px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #1f3b73;
+}
+
+.brief-output h3:first-child {
+  margin-top: 0;
+}
+
+.brief-output p {
+  margin: 0 0 8px;
+}
+
+.brief-output b {
+  color: #1a1a1a;
+}
+
+.output-placeholder {
+  color: #aaa;
+  font-style: italic;
+}
+
+/* ─── Recent briefs list ──────────────────────────────── */
+
+.brief-history {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.brief-history li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 0;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 14px;
+  gap: 12px;
+}
+
+.brief-history li:last-child {
+  border-bottom: none;
+}
+
+.brief-history .bh-title {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #333;
+}
+
+.brief-history .bh-meta {
+  font-size: 12px;
+  color: #999;
+  flex-shrink: 0;
+}
+
+/* ─── Opportunities table ─────────────────────────────── */
+
+.opp-table-wrap {
+  overflow-x: auto;
+}
+
+.opp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.opp-table th {
+  text-align: left;
+  padding: 9px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #888;
+  border-bottom: 2px solid #e8e8e8;
+}
+
+.opp-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #f0f0f0;
+  color: #333;
+  vertical-align: middle;
+}
+
+.opp-table tr:last-child td {
+  border-bottom: none;
+}
+
+.opp-table tr:hover td {
+  background: #fafafa;
+}
+
+.status-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: #eee;
+  color: #555;
+}
+
+.status-badge.not-started { background: #f0f0f0; color: #666; }
+.status-badge.in-progress { background: #eef1f8; color: #1f3b73; }
+.status-badge.submitted   { background: #edf7f0; color: #1a6639; }
+.status-badge.accepted    { background: #d4edda; color: #155724; }
+.status-badge.rejected    { background: #fde8e8; color: #8b1a1a; }
+
+/* ─── Utilities ───────────────────────────────────────── */
+
+.hidden { display: none !important; }
+
+.empty-state {
+  text-align: center;
+  padding: 32px 20px;
+  color: #aaa;
+  font-size: 14px;
+}
