@@ -8,6 +8,15 @@
 </head>
 <body>
 
+  <!-- ── Print frame (hidden, injected by JS for PDF export) ── -->
+  <div id="print-frame" class="print-only"></div>
+
+  <!-- ── Share banner (shown when loading a shared brief via URL hash) ── -->
+  <div id="share-banner" class="share-banner hidden">
+    <span>You are viewing a shared brief. <button id="btn-import-shared" class="btn-ghost-white">Save to my account →</button></span>
+    <button id="btn-close-banner" class="btn-close-banner">✕</button>
+  </div>
+
   <div id="app-shell">
 
     <!-- ── Dark sidebar ── -->
@@ -32,13 +41,11 @@
           <span class="sb-nav-dot"></span>Brief Builder
         </button>
         <button class="sb-nav-item" data-view="opportunities">
-          <span class="sb-nav-dot"></span>Opportunities
+          <span class="sb-nav-dot"></span>Applications
         </button>
       </nav>
 
-      <div class="sb-footer" id="sb-footer">
-        <!-- populated by JS when signed in -->
-      </div>
+      <div class="sb-footer" id="sb-footer"></div>
 
     </aside>
 
