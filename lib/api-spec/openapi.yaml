@@ -1,0 +1,343 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: College Brief Lab API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: briefs
+    description: Brief operations
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /generate-brief:
+    post:
+      operationId: generateBrief
+      tags: [briefs]
+      summary: Generate a structured brief using AI
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BriefGenerateInput"
+      responses:
+        "200":
+          description: Generated brief
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BriefResult"
+        "400":
+          description: Bad request
+
+  /briefs:
+    get:
+      operationId: listBriefs
+      tags: [briefs]
+      summary: List all briefs for authenticated user
+      parameters:
+        - name: firebaseUid
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: briefType
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of briefs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Brief"
+    post:
+      operationId: createBrief
+      tags: [briefs]
+      summary: Save a new brief
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BriefInput"
+      responses:
+        "201":
+          description: Created brief
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Brief"
+
+  /briefs/{id}:
+    get:
+      operationId: getBrief
+      tags: [briefs]
+      summary: Get a single brief
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Brief
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Brief"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateBrief
+      tags: [briefs]
+      summary: Update a brief
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BriefUpdate"
+      responses:
+        "200":
+          description: Updated brief
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Brief"
+        "404":
+          description: Not found
+    delete:
+      operationId: deleteBrief
+      tags: [briefs]
+      summary: Delete a brief
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
+
+  /briefs/stats:
+    get:
+      operationId: getBriefStats
+      tags: [briefs]
+      summary: Get brief usage stats for a user
+      parameters:
+        - name: firebaseUid
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BriefStats"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    BriefSection:
+      type: object
+      required: [heading, bullets]
+      properties:
+        heading:
+          type: string
+        bullets:
+          type: array
+          items:
+            type: string
+
+    BriefScore:
+      type: object
+      properties:
+        logic:
+          type: integer
+        evidence:
+          type: integer
+        clarity:
+          type: integer
+        originality:
+          type: integer
+
+    BriefResult:
+      type: object
+      required: [quality, sections]
+      properties:
+        quality:
+          type: string
+          enum: [good, filler]
+        sections:
+          type: array
+          items:
+            $ref: "#/components/schemas/BriefSection"
+        score:
+          $ref: "#/components/schemas/BriefScore"
+        summary:
+          type: string
+        message:
+          type: string
+
+    BriefGenerateInput:
+      type: object
+      required: [prompt, briefType, tone]
+      properties:
+        prompt:
+          type: string
+          minLength: 1
+        sourceNotes:
+          type: string
+        briefType:
+          type: string
+          enum: ["College Essay Outline", "Policy Memo", "Debate Case"]
+        tone:
+          type: string
+          enum: ["Neutral Analytic", "Advocacy", "Academic Formal"]
+        mode:
+          type: string
+          enum: [generate, polish]
+
+    Brief:
+      type: object
+      required: [id, firebaseUid, title, briefType, tone, outlineText, createdAt]
+      properties:
+        id:
+          type: integer
+        firebaseUid:
+          type: string
+        title:
+          type: string
+        briefType:
+          type: string
+        tone:
+          type: string
+        outlineText:
+          type: string
+        sections:
+          type: string
+        score:
+          type: ["string", "null"]
+        summary:
+          type: string
+        tags:
+          type: string
+        prompt:
+          type: string
+        sourceNotes:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+
+    BriefInput:
+      type: object
+      required: [firebaseUid, title, briefType, tone, outlineText, prompt]
+      properties:
+        firebaseUid:
+          type: string
+        title:
+          type: string
+        briefType:
+          type: string
+        tone:
+          type: string
+        outlineText:
+          type: string
+        sections:
+          type: string
+        score:
+          type: string
+        summary:
+          type: string
+        tags:
+          type: string
+        prompt:
+          type: string
+        sourceNotes:
+          type: string
+
+    BriefUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+        briefType:
+          type: string
+        tone:
+          type: string
+        outlineText:
+          type: string
+        sections:
+          type: string
+        score:
+          type: string
+        summary:
+          type: string
+        tags:
+          type: string
+
+    BriefStats:
+      type: object
+      required: [total, byType, recentCount]
+      properties:
+        total:
+          type: integer
+        byType:
+          type: object
+          additionalProperties:
+            type: integer
+        recentCount:
+          type: integer
+        topTags:
+          type: array
+          items:
+            type: string

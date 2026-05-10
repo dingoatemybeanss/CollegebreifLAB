@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "College Brief Lab"
+version = "1.0.0"
+id = "artifacts/college-brief-lab"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 25996
+
+[services.development]
+run = "pnpm --filter @workspace/college-brief-lab run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/college-brief-lab", "run", "build" ]
+publicDir = "artifacts/college-brief-lab/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "25996"
+BASE_PATH = "/"
